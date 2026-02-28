@@ -386,7 +386,10 @@ function PricingSection() {
 
         <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {/* Free */}
-          <div className="rounded-2xl border border-white/[0.04] bg-white/[0.02] p-8 flex flex-col">
+          <motion.div 
+            whileHover={{ scale: 1.02 }} 
+            className="rounded-2xl border border-white/[0.04] bg-white/[0.02] p-8 flex flex-col transition-all cursor-crosshair hover:border-white/[0.08]"
+          >
             <div className="border-b border-white/[0.04] pb-6 mb-6">
               <h3 className="text-2xl font-bold tracking-tight text-white mb-1">Free</h3>
               <p className="text-zinc-400 text-sm mb-4">Forever access</p>
@@ -402,10 +405,13 @@ function PricingSection() {
             <Link to="/signup" className="w-full text-center bg-zinc-50 text-zinc-950 px-6 py-3 rounded-lg font-medium hover:bg-zinc-200 transition-colors">
               Start Building
             </Link>
-          </div>
+          </motion.div>
 
           {/* Pro */}
-          <div className="rounded-2xl border border-white/[0.03] bg-transparent p-8 flex flex-col relative opacity-60">
+          <motion.div 
+            whileHover={{ scale: 1.02 }}
+            className="rounded-2xl border border-white/[0.03] bg-transparent p-8 flex flex-col relative opacity-60 transition-all hover:bg-white/[0.01]"
+          >
             <div className="absolute top-6 right-6 text-xs font-mono uppercase tracking-widest text-zinc-500 border border-zinc-800 px-2 py-1 rounded">
               Waitlist
             </div>
@@ -424,10 +430,13 @@ function PricingSection() {
             <button disabled className="w-full text-center bg-zinc-900 border border-zinc-800 text-zinc-500 px-6 py-3 rounded-lg font-medium cursor-not-allowed">
               Coming Soon
             </button>
-          </div>
+          </motion.div>
 
           {/* Enterprise */}
-          <div className="rounded-2xl border border-white/[0.03] bg-transparent p-8 flex flex-col relative opacity-60">
+          <motion.div 
+            whileHover={{ scale: 1.02 }}
+            className="rounded-2xl border border-white/[0.03] bg-transparent p-8 flex flex-col relative opacity-60 transition-all hover:bg-white/[0.01]"
+          >
             <div className="absolute top-6 right-6 text-xs font-mono uppercase tracking-widest text-zinc-500 border border-zinc-800 px-2 py-1 rounded">
               Waitlist
             </div>
@@ -446,7 +455,7 @@ function PricingSection() {
             <button disabled className="w-full text-center bg-zinc-900 border border-zinc-800 text-zinc-500 px-6 py-3 rounded-lg font-medium cursor-not-allowed">
               Contact Sales
             </button>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
@@ -466,7 +475,7 @@ function FAQSection() {
   const [openFaq, setOpenFaq] = useState(null)
 
   return (
-    <section className="py-24 bg-[#0a0a0a] text-zinc-50 border-t border-white/[0.03]">
+    <section className="py-24 bg-[#0a0a0a] text-zinc-50 border-t border-white/[0.03]" id="faq">
       <div className="max-w-3xl mx-auto px-6">
         <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-12 text-center">
           Frequently asked questions

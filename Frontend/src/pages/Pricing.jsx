@@ -78,17 +78,7 @@ const plans = [
   },
 ]
 
-const faqs = [
-  { q: 'Is the free plan really free forever?', a: 'Yes. All core risk analytics are free with no hidden costs. We may introduce optional Pro features in the future, but the free tier will always exist.' },
-  { q: 'Do you store my portfolio data?', a: 'No. Your portfolio tickers and weights are sent to our backend only during the analysis and are never persisted to any database.' },
-  { q: 'What stock exchanges are supported?', a: 'Any ticker supported by Yahoo Finance — US equities, ETFs, and many international listings. Just enter the correct Yahoo Finance ticker symbol.' },
-  { q: 'How accurate are the ML models?', a: 'The RandomForest volatility forecaster and GBM crash predictor are trained on historical data. They provide probabilistic signals, not guarantees. Always use them as one signal among many.' },
-  { q: 'How long does analysis take?', a: 'Typically 20–60 seconds depending on the number of tickers and timeframe. The ML models and Monte Carlo simulation add computation time.' },
-]
-
 export default function Pricing() {
-  const [openFaq, setOpenFaq] = useState(null)
-
   return (
     <div className="pt-24 pb-16">
       {/* Header */}
@@ -125,8 +115,8 @@ export default function Pricing() {
                 hidden: { opacity: 0, y: 20 },
                 visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } }
               }}
-              whileHover={{ y: -5 }}
-              className={`card relative flex flex-col border transition-shadow hover:shadow-card-hover ${plan.color} ${plan.badge ? 'opacity-80' : ''}`}
+              whileHover={{ scale: 1.02 }}
+              className={`card relative flex flex-col border transition-all hover:border-zinc-700 ${plan.color} ${plan.badge ? 'opacity-80' : ''}`}
             >
               {plan.badge && (
                 <div className="absolute top-4 right-4 badge-blue text-xs">{plan.badge}</div>
@@ -159,66 +149,6 @@ export default function Pricing() {
             </motion.div>
           ))}
         </motion.div>
-
-        <div className="max-w-2xl mx-auto">
-          <motion.h2 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="font-heading text-2xl font-bold text-text-primary mb-8 text-center"
-          >
-            Frequently asked questions
-          </motion.h2>
-          <motion.div 
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-50px" }}
-            variants={{
-              hidden: { opacity: 0 },
-              visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
-            }}
-            className="space-y-3"
-          >
-            {faqs.map((faq, i) => (
-              <motion.div 
-                key={i} 
-                layout
-                variants={{
-                  hidden: { opacity: 0, y: 10 },
-                  visible: { opacity: 1, y: 0 }
-                }}
-                className="card cursor-pointer overflow-hidden transition-colors hover:border-zinc-700" 
-                onClick={() => setOpenFaq(openFaq === i ? null : i)}
-              >
-                <motion.div layout className="flex items-center justify-between gap-4">
-                  <span className="font-medium text-text-primary text-sm">{faq.q}</span>
-                  <motion.div
-                    animate={{ rotate: openFaq === i ? 180 : 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <ChevronDown
-                      size={16}
-                      className={`min-w-[16px] transition-colors ${openFaq === i ? 'text-zinc-50' : 'text-text-muted'}`}
-                    />
-                  </motion.div>
-                </motion.div>
-                <AnimatePresence>
-                  {openFaq === i && (
-                    <motion.p 
-                      initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                      animate={{ opacity: 1, height: 'auto', marginTop: 12 }}
-                      exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                      transition={{ duration: 0.3, ease: 'easeInOut' }}
-                      className="text-text-secondary text-sm leading-relaxed"
-                    >
-                      {faq.a}
-                    </motion.p>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
       </div>
     </div>
   )
