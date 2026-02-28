@@ -1,0 +1,150 @@
+import React from 'react'
+import { Link } from 'react-router-dom'
+import { TrendingUp, Github, ArrowRight, Shield, Zap, Lock, BookOpen } from 'lucide-react'
+
+const team = [
+  {
+    name: 'Vinay Sharma',
+    role: 'Quant Developer',
+    description: 'Risk modeling, Monte Carlo simulation, Markowitz optimization',
+    avatar: 'VS',
+  },
+  {
+    name: 'Ashvin Tiwari',
+    role: 'Backend Engineer',
+    description: 'FastAPI development, data processing, ML pipeline integration',
+    avatar: 'AT',
+  },
+  {
+    name: 'Sumit Kumar',
+    role: 'Frontend Developer',
+    description: 'React dashboard, Plotly visualizations, UI/UX design',
+    avatar: 'SK',
+  },
+]
+
+const techStack = [
+  { name: 'React 18', category: 'Frontend' },
+  { name: 'Vite', category: 'Frontend' },
+  { name: 'Tailwind CSS', category: 'Frontend' },
+  { name: 'Plotly.js', category: 'Frontend' },
+  { name: 'Clerk', category: 'Auth' },
+  { name: 'Node.js', category: 'Backend' },
+  { name: 'Express', category: 'Backend' },
+  { name: 'Python 3.11', category: 'ML Engine' },
+  { name: 'NumPy / SciPy', category: 'ML Engine' },
+  { name: 'Scikit-learn', category: 'ML Engine' },
+  { name: 'yfinance', category: 'Data' },
+  { name: 'pytrends', category: 'Data' },
+]
+
+const categoryColors = {
+  Frontend: 'badge-blue',
+  Auth: 'badge-amber',
+  Backend: 'badge-cyan',
+  'ML Engine': 'badge-green',
+  Data: 'badge-red',
+}
+
+export default function About() {
+  return (
+    <div className="pt-24 pb-16">
+      {/* Hero */}
+      <section className="max-w-4xl mx-auto px-6 text-center mb-20">
+        <div className="w-16 h-16 rounded-xl bg-zinc-800 border border-zinc-800 flex items-center justify-center mx-auto mb-6">
+          <TrendingUp size={28} className="text-zinc-50" />
+        </div>
+        <h1 className="font-heading text-5xl font-bold text-text-primary mb-4">
+          About <span className="text-zinc-400">Nivesh-Setu</span>
+        </h1>
+        <p className="section-subheading mx-auto text-lg">
+          <strong>"Bridge to Investment"</strong> in Hindi. We built Nivesh-Setu to democratize institutional-grade risk analytics for retail investors — for free.
+        </p>
+      </section>
+
+      {/* Mission */}
+      <section className="max-w-7xl mx-auto px-6 mb-20">
+        <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div>
+            <div className="badge-blue mb-4 inline-flex">Our Mission</div>
+            <h2 className="font-heading text-3xl font-bold text-text-primary mb-4">
+              No Bloomberg Terminal required
+            </h2>
+            <p className="text-text-secondary leading-relaxed mb-4">
+              Professional risk metrics like VaR, CVaR, Sharpe Ratio, and Efficient Frontier are locked behind expensive institutional platforms. Retail investors making decisions without these tools are essentially flying blind.
+            </p>
+            <p className="text-text-secondary leading-relaxed">
+              We built Nivesh-Setu to change that. Every algorithm runs open-source, every metric is explained, and every retail investor can now access the same risk intelligence that hedge funds use — completely free.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            {[
+              { title: 'Open Source', desc: 'All algorithms are transparent and auditable', icon: Lock },
+              { title: 'Free Forever', desc: 'Core analytics will always be free', icon: Shield },
+              { title: 'No Data Storage', desc: 'Your portfolio stays on your device', icon: Zap },
+              { title: 'Educational', desc: 'Learn how every metric is computed', icon: BookOpen },
+            ].map(item => (
+              <div key={item.title} className="card text-center">
+                <item.icon size={24} className="text-zinc-400 mx-auto mb-3" />
+                <div className="font-heading font-semibold text-text-primary text-sm mb-1">{item.title}</div>
+                <div className="text-text-muted text-xs">{item.desc}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Team */}
+      <section className="max-w-7xl mx-auto px-6 mb-20">
+        <div className="text-center mb-12">
+          <div className="badge-cyan mb-4 inline-flex">The Team</div>
+          <h2 className="font-heading text-3xl font-bold text-text-primary">Built by quants & engineers</h2>
+        </div>
+        <div className="grid md:grid-cols-3 gap-6">
+          {team.map(member => (
+            <div key={member.name} className="card text-center">
+              <div className="w-16 h-16 rounded-xl bg-zinc-800 border border-zinc-800 flex items-center justify-center mx-auto mb-4 font-heading font-bold text-lg text-zinc-300">
+                {member.avatar}
+              </div>
+              <h3 className="font-heading font-semibold text-text-primary text-base mb-1">{member.name}</h3>
+              <div className="badge-blue mb-3 inline-flex text-xs">{member.role}</div>
+              <p className="text-text-secondary text-sm">{member.description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Tech Stack */}
+      <section className="max-w-7xl mx-auto px-6 mb-20">
+        <div className="text-center mb-12">
+          <div className="badge-green mb-4 inline-flex">Technology</div>
+          <h2 className="font-heading text-3xl font-bold text-text-primary mb-6">Built on proven open-source</h2>
+          <div className="card max-w-4xl mx-auto">
+            <div className="flex flex-wrap gap-3 justify-center p-6">
+              {techStack.map(tech => (
+                <span key={tech.name} className={`px-4 py-2 rounded-lg border ${categoryColors[tech.category]}`}>
+                  {tech.name}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="max-w-2xl mx-auto px-6 text-center">
+        <h2 className="font-heading text-2xl font-bold text-text-primary mb-4">
+          Ready to analyze your portfolio?
+        </h2>
+        <div className="flex gap-4 justify-center">
+          <Link to="/signup" className="btn-primary">
+            Start Now <ArrowRight size={16} className="ml-2" />
+          </Link>
+          <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="btn-secondary gap-2">
+            <Github size={16} /> View on GitHub
+          </a>
+        </div>
+      </section>
+    </div>
+  )
+}

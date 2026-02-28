@@ -1,0 +1,422 @@
+import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { 
+  TrendingUp, Shield, Brain, BarChart, Activity, Zap, ArrowRight,
+  CheckCircle, Star, Lock, Globe, Terminal, LineChart, Code, HelpCircle,
+  Briefcase, TrendingDown, ChevronUp, ChevronDown
+} from 'lucide-react'
+
+// Demo data for dashboard preview
+const demoMetrics = {
+  tickers: ['AAPL', 'MSFT', 'NVDA', 'TSLA', 'AMZN'],
+  returnPct: '18.42',
+  volPct: '24.67',
+  varPct: '13.52',
+  sharpe: '1.84',
+  beta: '1.12',
+  crashProb: '23',
+}
+
+// --- Hero ---
+function Hero() {
+  return (
+    <section className="relative min-h-screen bg-[#0a0a0a] text-zinc-50 pt-32 pb-16 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-4xl">
+          <h1 className="text-6xl md:text-8xl font-bold tracking-tight leading-[1.05] mb-6">
+            Institutional risk.<br />
+            <span className="text-zinc-500">Zero latency.</span>
+          </h1>
+          
+          <p className="text-xl md:text-2xl text-zinc-400 font-light tracking-tight mb-10 max-w-2xl">
+            Nivesh-Setu brings hedge-fund risk tools to retail investors. 
+            Run Value at Risk, Monte Carlo, and ML forecasting directly in your browser.
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-start gap-4">
+            <Link to="/signup" className="bg-zinc-50 text-zinc-950 px-8 py-4 rounded-lg font-medium hover:bg-zinc-200 transition-colors flex items-center justify-center">
+              Talk to us
+            </Link>
+            <Link to="/signup" className="text-zinc-400 hover:text-zinc-50 px-8 py-4 font-medium transition-colors flex items-center justify-center">
+              Try Demo Portfolio <ArrowRight size={18} className="ml-2" />
+            </Link>
+          </div>
+        </div>
+
+        {/* Dashboard Preview */}
+        <div className="mt-20 relative w-full rounded-2xl border border-white/[0.04] bg-white/[0.02] p-2 md:p-4 backdrop-blur-sm">
+          <div className="w-full rounded-xl bg-zinc-900 border border-zinc-800 overflow-hidden relative shadow-2xl">
+            {/* Window Header */}
+            <div className="w-full h-12 border-b border-zinc-800 flex items-center px-4 gap-2 bg-zinc-900">
+              <div className="w-3 h-3 rounded-full bg-zinc-700" />
+              <div className="w-3 h-3 rounded-full bg-zinc-700" />
+              <div className="w-3 h-3 rounded-full bg-zinc-700" />
+              <span className="ml-4 text-xs text-zinc-500 font-mono">nivesh-setu.app/dashboard</span>
+            </div>
+            
+            {/* Dashboard Content */}
+            <div className="p-6">
+              {/* Header */}
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h3 className="text-lg font-semibold text-zinc-50">Portfolio Overview</h3>
+                  <p className="text-zinc-500 text-xs">{demoMetrics.tickers.join(' · ')} · 1Y</p>
+                </div>
+                <span className="px-3 py-1 rounded text-xs font-mono bg-zinc-800 text-zinc-400">LOW RISK</span>
+              </div>
+              
+              {/* Metrics Grid */}
+              <div className="grid grid-cols-3 md:grid-cols-6 gap-3 mb-6">
+                {[
+                  { label: 'Ann. Return', value: `${demoMetrics.returnPct}%`, color: 'text-green-400' },
+                  { label: 'Volatility', value: `${demoMetrics.volPct}%`, color: 'text-amber-400' },
+                  { label: 'VaR (95%)', value: `-${demoMetrics.varPct}%`, color: 'text-red-400' },
+                  { label: 'Sharpe', value: demoMetrics.sharpe, color: 'text-zinc-50' },
+                  { label: 'Beta', value: demoMetrics.beta, color: 'text-zinc-400' },
+                  { label: 'Crash Prob.', value: `${demoMetrics.crashProb}%`, color: 'text-green-400' },
+                ].map((m, i) => (
+                  <div key={i} className="p-3 rounded-xl bg-zinc-800/50 border border-zinc-800">
+                    <div className="text-zinc-500 text-[10px] mb-1">{m.label}</div>
+                    <div className={`font-bold text-sm ${m.color}`}>{m.value}</div>
+                  </div>
+                ))}
+              </div>
+              
+              {/* Chart Placeholder */}
+              <div className="h-32 rounded-lg bg-zinc-800/30 border border-zinc-800 flex items-end justify-around p-4">
+                {[45, 62, 38, 75, 58, 82, 65, 72, 55, 68, 78, 60].map((h, i) => (
+                  <div key={i} className="w-full max-w-[20px] bg-zinc-600 rounded-t" style={{ height: `${h}%` }} />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// --- Split View Feature ---
+function FeaturesSection() {
+  const [activeFeature, setActiveFeature] = useState(0)
+  const featuresList = [
+    { title: "Core Risk Metrics", description: "VaR, CVaR, Sharpe, Beta, and Max Drawdown calculated in real-time." },
+    { title: "Monte Carlo Simulation", description: "10,000 simulated portfolio paths over 252 trading days." },
+    { title: "ML Intelligence", description: "Random Forest volatility forecasting and GBM crash predictors." },
+    { title: "Alt Data Signals", description: "Real-time Google Trends sentiment scoring and VIX integration." }
+  ]
+
+  return (
+    <section className="py-24 bg-[#0a0a0a] text-zinc-50 border-t border-white/[0.03]" id="features">
+      <div className="max-w-7xl mx-auto px-6">
+        <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-16">
+          Convert, optimize, distribute.
+        </h2>
+
+        <div className="grid lg:grid-cols-2 gap-12 items-start">
+          <div className="w-full aspect-square md:aspect-video lg:aspect-square border border-white/[0.04] rounded-2xl bg-white/[0.02] p-6 flex flex-col sticky top-24">
+            <div className="text-xs font-mono text-zinc-500 mb-4 flex items-center gap-2">
+              <Terminal size={14} /> nivesh-core --watch
+            </div>
+            <div className="flex-1 border border-zinc-800 rounded-lg bg-zinc-900 overflow-hidden p-4">
+              <div className="text-xs font-mono text-zinc-600 mb-3 tracking-tighter">
+                [ RUNNING {featuresList[activeFeature].title.toUpperCase()} ]
+              </div>
+              
+              {/* Dashboard-like preview */}
+              <div className="grid grid-cols-3 gap-2 mb-4">
+                {[
+                  { label: 'VaR', value: '-2.41%' },
+                  { label: 'Sharpe', value: '1.84' },
+                  { label: 'Beta', value: '1.12' },
+                ].map((m, i) => (
+                  <div key={i} className="p-2 rounded bg-zinc-800/50 text-center">
+                    <div className="text-[9px] text-zinc-500">{m.label}</div>
+                    <div className="text-xs font-bold text-zinc-300">{m.value}</div>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="w-full flex items-end gap-1 h-20">
+                {[40, 70, 45, 90, 65, 30, 85, 55, 75, 50].map((h, i) => (
+                  <div key={i} className="flex-1 bg-zinc-600 rounded-t-sm transition-all duration-500" style={{ height: `${activeFeature === i % 4 ? h + 15 : h}%` }} />
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col">
+            {featuresList.map((feature, idx) => (
+              <div 
+                key={idx}
+                className={`group cursor-pointer py-8 border-b border-white/[0.04] transition-colors ${activeFeature === idx ? 'opacity-100' : 'opacity-40 hover:opacity-100'}`}
+                onClick={() => setActiveFeature(idx)}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-3xl font-semibold tracking-tight">{feature.title}</h3>
+                  <kbd className="hidden md:inline-flex px-3 py-1 text-sm border border-white/[0.04] rounded bg-white/[0.02] font-mono text-zinc-500">0{idx + 1}</kbd>
+                </div>
+                {activeFeature === idx && (
+                  <p className="text-zinc-400 font-light mt-4 text-lg max-w-md animate-fadeIn transition-all">
+                    {feature.description}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// --- Bento Box Grid (Secondary Features) ---
+function BentoGrid() {
+  return (
+    <section className="py-24 bg-[#0a0a0a] text-zinc-50 border-t border-white/[0.03]" id="how-it-works">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
+            Engineered for edge cases.
+          </h2>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[250px]">
+          <div className="md:col-span-2 rounded-2xl border border-white/[0.04] bg-white/[0.02] p-8 flex flex-col justify-between hover:border-white/[0.08] transition-colors">
+            <div>
+              <Activity className="text-zinc-300 mb-6" size={28} />
+              <h3 className="text-2xl font-bold tracking-tight mb-2">Markowitz Optimization</h3>
+              <p className="text-zinc-400 max-w-md font-light">
+                Discover the efficient frontier. Instantly calculate optimal asset weights that maximize your portfolio's Sharpe ratio.
+              </p>
+            </div>
+          </div>
+          <div className="rounded-2xl border border-white/[0.04] bg-white/[0.02] p-8 flex flex-col justify-between hover:border-white/[0.08] transition-colors">
+            <div>
+              <Globe className="text-zinc-300 mb-6" size={28} />
+              <h3 className="text-2xl font-bold tracking-tight mb-2">Global Data</h3>
+              <p className="text-zinc-400 font-light text-sm">
+                Seamless integration with Yahoo Finance. Support for any publicly traded asset globally.
+              </p>
+            </div>
+          </div>
+          <div className="rounded-2xl border border-white/[0.04] bg-white/[0.02] p-8 flex flex-col justify-between hover:border-white/[0.08] transition-colors">
+            <div>
+              <Lock className="text-zinc-300 mb-6" size={28} />
+              <h3 className="text-2xl font-bold tracking-tight mb-2">Stateless Privacy</h3>
+              <p className="text-zinc-400 font-light text-sm">
+                No tracking. No permanent storage. Your portfolio holdings stay strictly local until explicitly saved.
+              </p>
+            </div>
+          </div>
+          <div className="md:col-span-2 rounded-2xl border border-white/[0.04] bg-white/[0.02] p-8 flex flex-col justify-between hover:border-white/[0.08] transition-colors relative overflow-hidden">
+            <div className="absolute right-0 bottom-0 text-zinc-800 opacity-20 pointer-events-none p-4">
+              <Code size={180} />
+            </div>
+            <div className="relative z-10">
+              <Zap className="text-zinc-300 mb-6" size={28} />
+              <h3 className="text-2xl font-bold tracking-tight mb-2">Smart Risk Alerts</h3>
+              <p className="text-zinc-400 max-w-md font-light">
+                Rule-based parameters mixed with ML anomaly detection. Get instantly alerted on volatility spikes or correlation breakdowns.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// --- Metrics ---
+function MetricsShowcase() {
+  const stats = [
+    { value: "-2.41%", label: "Value at Risk (95%)", fill: "60%" },
+    { value: "1.84", label: "Sharpe Ratio", fill: "85%" },
+    { value: "10K+", label: "Monte Carlo Paths", fill: "100%" },
+    { value: "23%", label: "Crash Probability", fill: "23%" },
+  ]
+
+  return (
+    <section className="py-24 bg-[#0a0a0a] text-zinc-50 border-t border-white/[0.03]">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="mb-20">
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
+            What Nivesh-Setu delivers today.
+          </h2>
+          <p className="text-zinc-400 text-xl font-light max-w-2xl">
+            Hardened quantitative models producing real-time institutional metrics with zero friction.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
+          {stats.map((stat, idx) => (
+            <div key={idx} className="flex flex-col border-l border-white/[0.04] pl-6">
+              <div className="text-5xl md:text-6xl font-bold tracking-tight tabular-nums mb-4">
+                {stat.value}
+              </div>
+              <div className="w-full h-1 bg-white/[0.05] rounded-full overflow-hidden mb-4">
+                <div className="h-full bg-zinc-400 transition-all duration-1000" style={{ width: stat.fill }} />
+              </div>
+              <div className="text-sm font-medium text-zinc-400">
+                {stat.label}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// --- Pricing (with Enterprise) ---
+function PricingSection() {
+  return (
+    <section className="py-24 bg-[#0a0a0a] text-zinc-50 border-t border-white/[0.03]" id="pricing">
+      <div className="max-w-7xl mx-auto px-6">
+        <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-16">
+          Simple logic. No catch.
+        </h2>
+
+        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          {/* Free */}
+          <div className="rounded-2xl border border-white/[0.04] bg-white/[0.02] p-8 flex flex-col">
+            <div className="border-b border-white/[0.04] pb-6 mb-6">
+              <h3 className="text-2xl font-bold tracking-tight text-white mb-1">Free</h3>
+              <p className="text-zinc-400 text-sm mb-4">Forever access</p>
+              <div><span className="text-3xl font-bold">$0</span><span className="text-zinc-500">/mo</span></div>
+            </div>
+            <ul className="space-y-3 mb-8 flex-1">
+              {['VaR, CVaR, Sharpe, Beta', 'Monte Carlo simulation', 'ML forecasts', 'Scenario analysis'].map(f => (
+                <li key={f} className="flex items-center gap-3 text-zinc-300 font-light text-sm">
+                  <CheckCircle size={14} className="text-zinc-600" /> {f}
+                </li>
+              ))}
+            </ul>
+            <Link to="/signup" className="w-full text-center bg-zinc-50 text-zinc-950 px-6 py-3 rounded-lg font-medium hover:bg-zinc-200 transition-colors">
+              Start Building
+            </Link>
+          </div>
+
+          {/* Pro */}
+          <div className="rounded-2xl border border-white/[0.03] bg-transparent p-8 flex flex-col relative opacity-60">
+            <div className="absolute top-6 right-6 text-xs font-mono uppercase tracking-widest text-zinc-500 border border-zinc-800 px-2 py-1 rounded">
+              Waitlist
+            </div>
+            <div className="border-b border-zinc-800 pb-6 mb-6">
+              <h3 className="text-2xl font-bold tracking-tight text-white mb-1">Pro</h3>
+              <p className="text-zinc-400 text-sm mb-4">Early access</p>
+              <div><span className="text-3xl font-bold">$9</span><span className="text-zinc-500">/mo</span></div>
+            </div>
+            <ul className="space-y-3 mb-8 flex-1">
+              {['Saved portfolios', 'PDF Risk Reports', 'Real-time alerts', 'API access'].map(f => (
+                <li key={f} className="flex items-center gap-3 text-zinc-400 font-light text-sm">
+                  <CheckCircle size={14} className="text-zinc-700" /> {f}
+                </li>
+              ))}
+            </ul>
+            <button disabled className="w-full text-center bg-zinc-900 border border-zinc-800 text-zinc-500 px-6 py-3 rounded-lg font-medium cursor-not-allowed">
+              Coming Soon
+            </button>
+          </div>
+
+          {/* Enterprise */}
+          <div className="rounded-2xl border border-white/[0.03] bg-transparent p-8 flex flex-col relative opacity-60">
+            <div className="absolute top-6 right-6 text-xs font-mono uppercase tracking-widest text-zinc-500 border border-zinc-800 px-2 py-1 rounded">
+              Waitlist
+            </div>
+            <div className="border-b border-zinc-800 pb-6 mb-6">
+              <h3 className="text-2xl font-bold tracking-tight text-white mb-1">Enterprise</h3>
+              <p className="text-zinc-400 text-sm mb-4">Custom integrations</p>
+              <div><span className="text-3xl font-bold">Custom</span></div>
+            </div>
+            <ul className="space-y-3 mb-8 flex-1">
+              {['Everything in Pro', 'API Access (REST)', 'White-label Reports', 'Custom Risk Models'].map(f => (
+                <li key={f} className="flex items-center gap-3 text-zinc-400 font-light text-sm">
+                  <CheckCircle size={14} className="text-zinc-700" /> {f}
+                </li>
+              ))}
+            </ul>
+            <button disabled className="w-full text-center bg-zinc-900 border border-zinc-800 text-zinc-500 px-6 py-3 rounded-lg font-medium cursor-not-allowed">
+              Contact Sales
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// --- FAQs ---
+const faqs = [
+  { q: 'Is the free plan really free forever?', a: 'Yes. All core risk analytics are free with no hidden costs. We may introduce optional Pro features in the future, but the free tier will always exist.' },
+  { q: 'Do you store my portfolio data?', a: 'No. Your portfolio tickers and weights are sent to our backend only during the analysis and are never persisted to any database.' },
+  { q: 'What stock exchanges are supported?', a: 'Any ticker supported by Yahoo Finance — US equities, ETFs, and many international listings. Just enter the correct Yahoo Finance ticker symbol.' },
+  { q: 'How accurate are the ML models?', a: 'The RandomForest volatility forecaster and GBM crash predictor are trained on historical data. They provide probabilistic signals, not guarantees.' },
+  { q: 'How long does analysis take?', a: 'Typically 20–60 seconds depending on the number of tickers and timeframe. The ML models and Monte Carlo simulation add computation time.' },
+]
+
+function FAQSection() {
+  const [openFaq, setOpenFaq] = useState(null)
+
+  return (
+    <section className="py-24 bg-[#0a0a0a] text-zinc-50 border-t border-white/[0.03]">
+      <div className="max-w-3xl mx-auto px-6">
+        <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-12 text-center">
+          Frequently asked questions
+        </h2>
+        <div className="space-y-3">
+          {faqs.map((faq, i) => (
+            <div 
+              key={i} 
+              className="rounded-xl border border-white/[0.04] bg-white/[0.02] p-5 cursor-pointer transition-colors hover:border-white/[0.08]" 
+              onClick={() => setOpenFaq(openFaq === i ? null : i)}
+            >
+              <div className="flex items-center justify-between gap-4">
+                <span className="font-medium text-zinc-50">{faq.q}</span>
+                <HelpCircle
+                  size={18}
+                  className={`min-w-[18px] transition-colors ${openFaq === i ? 'text-zinc-50' : 'text-zinc-500'}`}
+                />
+              </div>
+              {openFaq === i && (
+                <p className="text-zinc-400 text-sm mt-4 leading-relaxed">{faq.a}</p>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// --- CTA Section ---
+function CTASection() {
+  return (
+    <section className="py-32 bg-[#0a0a0a] text-zinc-50 border-t border-white/[0.03]">
+      <div className="max-w-4xl mx-auto px-6">
+        <h2 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.05] mb-6">
+          Analyze it now.
+        </h2>
+        <p className="text-xl md:text-2xl text-zinc-400 font-light mb-12 max-w-2xl">
+          Get institutional risk metrics on your portfolio in 60 seconds. No account needed.
+        </p>
+        <Link to="/signup" className="inline-flex items-center justify-center bg-zinc-50 text-zinc-950 px-8 py-5 rounded-xl font-semibold hover:bg-zinc-200 transition-colors text-lg tracking-tight">
+          Start Free Analysis <ArrowRight size={20} className="ml-2" />
+        </Link>
+      </div>
+    </section>
+  )
+}
+
+export default function Landing() {
+  return (
+    <div className="bg-[#0a0a0a] min-h-screen">
+      <Hero />
+      <MetricsShowcase />
+      <FeaturesSection />
+      <BentoGrid />
+      <PricingSection />
+      <FAQSection />
+    </div>
+  )
+}
