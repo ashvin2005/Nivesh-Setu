@@ -6,8 +6,8 @@ import { Menu, X, TrendingUp, BarChart2, ChevronRight } from 'lucide-react'
 const navLinks = [
   { label: 'Features', href: '/#features' },
   { label: 'How It Works', href: '/#how-it-works' },
-  { label: 'Pricing', href: '/pricing' },
-  { label: 'About', href: '/about' },
+  { label: 'Pricing', href: '/#pricing' },
+  { label: 'FAQ', href: '/#faq' },
 ]
 
 export default function MarketingNavbar() {
