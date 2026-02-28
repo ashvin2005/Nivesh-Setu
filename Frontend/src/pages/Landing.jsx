@@ -5,6 +5,7 @@ import {
   CheckCircle, Star, Lock, Globe, Terminal, LineChart, Code, HelpCircle,
   Briefcase, TrendingDown, ChevronUp, ChevronDown, AlertTriangle
 } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 // Demo data for dashboard preview
 const demoMetrics = {
@@ -22,29 +23,63 @@ function Hero() {
   return (
     <section className="relative min-h-screen bg-[#0a0a0a] text-zinc-50 pt-32 pb-16 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="max-w-4xl">
-          <h1 className="text-6xl md:text-8xl font-bold tracking-tight leading-[1.05] mb-6">
+        <motion.div 
+          className="max-w-4xl"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: { staggerChildren: 0.2 }
+            }
+          }}
+        >
+          <motion.h1 
+            variants={{
+              hidden: { opacity: 0, y: 30 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+            }}
+            className="text-6xl md:text-8xl font-bold tracking-tight leading-[1.05] mb-6"
+          >
             Institutional risk.<br />
             <span className="text-zinc-500">Zero latency.</span>
-          </h1>
+          </motion.h1>
           
-          <p className="text-xl md:text-2xl text-zinc-400 font-light tracking-tight mb-10 max-w-2xl">
+          <motion.p 
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+            }}
+            className="text-xl md:text-2xl text-zinc-400 font-light tracking-tight mb-10 max-w-2xl"
+          >
             Nivesh-Setu brings hedge-fund risk tools to retail investors. 
             Run Value at Risk, Monte Carlo, and ML forecasting directly in your browser.
-          </p>
+          </motion.p>
 
-          <div className="flex flex-col sm:flex-row items-start gap-4">
+          <motion.div 
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }
+            }}
+            className="flex flex-col sm:flex-row items-start gap-4"
+          >
             <Link to="/signup" className="bg-zinc-50 text-zinc-950 px-8 py-4 rounded-lg font-medium hover:bg-zinc-200 transition-colors flex items-center justify-center">
               Talk to us
             </Link>
             <Link to="/signup" className="text-zinc-400 hover:text-zinc-50 px-8 py-4 font-medium transition-colors flex items-center justify-center">
               Try Demo Portfolio <ArrowRight size={18} className="ml-2" />
             </Link>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Dashboard Preview */}
-        <div className="mt-20 relative w-full rounded-2xl border border-white/[0.04] bg-white/[0.02] p-2 md:p-4 backdrop-blur-sm">
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          className="mt-20 relative w-full rounded-2xl border border-white/[0.04] bg-white/[0.02] p-2 md:p-4 backdrop-blur-sm"
+        >
           <div className="w-full rounded-xl bg-zinc-900 border border-zinc-800 overflow-hidden relative shadow-2xl">
             {/* Window Header */}
             <div className="w-full h-12 border-b border-zinc-800 flex items-center px-4 gap-2 bg-zinc-900">
@@ -126,7 +161,7 @@ function Hero() {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   )
@@ -160,7 +195,7 @@ function FeaturesSection() {
               </div>
               
               {/* Dashboard-like preview */}
-              <div className="grid grid-cols-3 gap-2 mb-4">
+              <motion.div layout className="grid grid-cols-3 gap-2 mb-4">
                 {[
                   { label: 'VaR', value: '-2.41%' },
                   { label: 'Sharpe', value: '1.84' },
@@ -171,10 +206,10 @@ function FeaturesSection() {
                     <div className="text-xs font-bold text-zinc-300">{m.value}</div>
                   </div>
                 ))}
-              </div>
+              </motion.div>
               
               {/* Simulated Deep Analysis Section */}
-              <div className="p-3 bg-zinc-800/30 rounded-lg border border-zinc-800">
+              <motion.div layout className="p-3 bg-zinc-800/30 rounded-lg border border-zinc-800">
                  <div className="flex items-center justify-between mb-3 text-[10px] text-zinc-400 font-mono">
                     <span>{activeFeature === 0 ? 'RISK_CONTRIBUTION' : activeFeature === 1 ? 'MONTE_CARLO_PATHS' : activeFeature === 2 ? 'FEATURE_IMPORTANCE' : 'SENTIMENT_SCORE'}</span>
                     <span className="text-green-400 text-[9px]">ACTIVE</span>
@@ -183,14 +218,17 @@ function FeaturesSection() {
                  {/* Visual representation based on active feature */}
                  <div className="flex items-end gap-1 h-14">
                     {[40, 70, 45, 90, 65, 30, 85, 55, 75, 50].map((h, i) => (
-                      <div 
+                      <motion.div 
                         key={i} 
-                        className={`flex-1 rounded-sm transition-all duration-500 ${activeFeature === 1 ? 'bg-cyan-500/40' : activeFeature === 2 ? 'bg-amber-500/40' : activeFeature === 3 ? 'bg-green-500/40' : 'bg-red-500/40'}`} 
-                        style={{ height: `${activeFeature === i % 4 ? h + 15 : h}%` }} 
+                        layout
+                        initial={false}
+                        animate={{ height: `${activeFeature === i % 4 ? h + 15 : h}%` }}
+                        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                        className={`flex-1 rounded-sm ${activeFeature === 1 ? 'bg-cyan-500/40' : activeFeature === 2 ? 'bg-amber-500/40' : activeFeature === 3 ? 'bg-green-500/40' : 'bg-red-500/40'}`} 
                       />
                     ))}
                  </div>
-              </div>
+              </motion.div>
             </div>
           </div>
 
@@ -205,11 +243,18 @@ function FeaturesSection() {
                   <h3 className="text-3xl font-semibold tracking-tight">{feature.title}</h3>
                   <kbd className="hidden md:inline-flex px-3 py-1 text-sm border border-white/[0.04] rounded bg-white/[0.02] font-mono text-zinc-500">0{idx + 1}</kbd>
                 </div>
-                {activeFeature === idx && (
-                  <p className="text-zinc-400 font-light mt-4 text-lg max-w-md animate-fadeIn transition-all">
-                    {feature.description}
-                  </p>
-                )}
+                <AnimatePresence>
+                  {activeFeature === idx && (
+                    <motion.p 
+                      initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                      animate={{ opacity: 1, height: 'auto', marginTop: 16 }}
+                      exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                      className="text-zinc-400 font-light text-lg max-w-md overflow-hidden"
+                    >
+                      {feature.description}
+                    </motion.p>
+                  )}
+                </AnimatePresence>
               </div>
             ))}
           </div>
@@ -299,17 +344,30 @@ function MetricsShowcase() {
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
           {stats.map((stat, idx) => (
-            <div key={idx} className="flex flex-col border-l border-white/[0.04] pl-6">
+            <motion.div 
+              key={idx} 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6, delay: idx * 0.1 }}
+              className="flex flex-col border-l border-white/[0.04] pl-6"
+            >
               <div className="text-5xl md:text-6xl font-bold tracking-tight tabular-nums mb-4">
                 {stat.value}
               </div>
               <div className="w-full h-1 bg-white/[0.05] rounded-full overflow-hidden mb-4">
-                <div className="h-full bg-zinc-400 transition-all duration-1000" style={{ width: stat.fill }} />
+                <motion.div 
+                  initial={{ width: 0 }}
+                  whileInView={{ width: stat.fill }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  transition={{ duration: 1.5, delay: 0.2 + (idx * 0.1), ease: "easeOut" }}
+                  className="h-full bg-zinc-400" 
+                />
               </div>
               <div className="text-sm font-medium text-zinc-400">
                 {stat.label}
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
@@ -415,22 +473,38 @@ function FAQSection() {
         </h2>
         <div className="space-y-3">
           {faqs.map((faq, i) => (
-            <div 
+            <motion.div 
               key={i} 
-              className="rounded-xl border border-white/[0.04] bg-white/[0.02] p-5 cursor-pointer transition-colors hover:border-white/[0.08]" 
+              layout
+              className="rounded-xl border border-white/[0.04] bg-white/[0.02] p-5 cursor-pointer transition-colors hover:border-white/[0.08] overflow-hidden" 
               onClick={() => setOpenFaq(openFaq === i ? null : i)}
             >
-              <div className="flex items-center justify-between gap-4">
+              <motion.div layout className="flex items-center justify-between gap-4">
                 <span className="font-medium text-zinc-50">{faq.q}</span>
-                <HelpCircle
-                  size={18}
-                  className={`min-w-[18px] transition-colors ${openFaq === i ? 'text-zinc-50' : 'text-zinc-500'}`}
-                />
-              </div>
-              {openFaq === i && (
-                <p className="text-zinc-400 text-sm mt-4 leading-relaxed">{faq.a}</p>
-              )}
-            </div>
+                <motion.div
+                  animate={{ rotate: openFaq === i ? 180 : 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <ChevronDown
+                    size={18}
+                    className={`min-w-[18px] transition-colors ${openFaq === i ? 'text-zinc-50' : 'text-zinc-500'}`}
+                  />
+                </motion.div>
+              </motion.div>
+              <AnimatePresence>
+                {openFaq === i && (
+                  <motion.p 
+                    initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                    animate={{ opacity: 1, height: 'auto', marginTop: 16 }}
+                    exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    className="text-zinc-400 text-sm leading-relaxed"
+                  >
+                    {faq.a}
+                  </motion.p>
+                )}
+              </AnimatePresence>
+            </motion.div>
           ))}
         </div>
       </div>
@@ -466,6 +540,7 @@ export default function Landing() {
       <BentoGrid />
       <PricingSection />
       <FAQSection />
+      <CTASection />
     </div>
   )
 }

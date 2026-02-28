@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { CheckCircle, X, ArrowRight, HelpCircle } from 'lucide-react'
+import { CheckCircle, X, ArrowRight, ChevronDown } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 const plans = [
   {
@@ -91,7 +92,12 @@ export default function Pricing() {
   return (
     <div className="pt-24 pb-16">
       {/* Header */}
-      <div className="max-w-4xl mx-auto px-6 text-center mb-16">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="max-w-4xl mx-auto px-6 text-center mb-16"
+      >
         <div className="badge-blue mb-4 inline-flex">Pricing</div>
         <h1 className="font-heading text-5xl font-bold text-text-primary mb-4">
           Simple, transparent <span className="text-zinc-400">pricing</span>
@@ -99,15 +105,28 @@ export default function Pricing() {
         <p className="section-subheading mx-auto">
           Start free with full analytics. Upgrade when you need portfolio persistence and advanced reporting.
         </p>
-      </div>
+      </motion.div>
 
       {/* Plans Grid */}
       <div className="max-w-7xl mx-auto px-6">
-        <div className="grid md:grid-cols-3 gap-6 mb-20">
+        <motion.div 
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { opacity: 1, transition: { staggerChildren: 0.15 } }
+          }}
+          className="grid md:grid-cols-3 gap-6 mb-20"
+        >
           {plans.map(plan => (
-            <div
+            <motion.div
               key={plan.name}
-              className={`card relative flex flex-col border ${plan.color} ${plan.badge ? 'opacity-80' : ''}`}
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } }
+              }}
+              whileHover={{ y: -5 }}
+              className={`card relative flex flex-col border transition-shadow hover:shadow-card-hover ${plan.color} ${plan.badge ? 'opacity-80' : ''}`}
             >
               {plan.badge && (
                 <div className="absolute top-4 right-4 badge-blue text-xs">{plan.badge}</div>
@@ -137,31 +156,68 @@ export default function Pricing() {
                 ? <Link to={plan.cta.to} className="btn-primary text-center">{plan.cta.label}</Link>
                 : <button disabled className="btn-secondary opacity-60 cursor-not-allowed">{plan.cta.label}</button>
               }
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
-        {/* FAQ */}
         <div className="max-w-2xl mx-auto">
-          <h2 className="font-heading text-2xl font-bold text-text-primary mb-8 text-center">
+          <motion.h2 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="font-heading text-2xl font-bold text-text-primary mb-8 text-center"
+          >
             Frequently asked questions
-          </h2>
-          <div className="space-y-3">
+          </motion.h2>
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={{
+              hidden: { opacity: 0 },
+              visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+            }}
+            className="space-y-3"
+          >
             {faqs.map((faq, i) => (
-              <div key={i} className="card cursor-pointer" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
-                <div className="flex items-center justify-between gap-4">
+              <motion.div 
+                key={i} 
+                layout
+                variants={{
+                  hidden: { opacity: 0, y: 10 },
+                  visible: { opacity: 1, y: 0 }
+                }}
+                className="card cursor-pointer overflow-hidden transition-colors hover:border-zinc-700" 
+                onClick={() => setOpenFaq(openFaq === i ? null : i)}
+              >
+                <motion.div layout className="flex items-center justify-between gap-4">
                   <span className="font-medium text-text-primary text-sm">{faq.q}</span>
-                  <HelpCircle
-                    size={16}
-                    className={`min-w-[16px] transition-colors ${openFaq === i ? 'text-zinc-50' : 'text-text-muted'}`}
-                  />
-                </div>
-                {openFaq === i && (
-                  <p className="text-text-secondary text-sm mt-3 leading-relaxed">{faq.a}</p>
-                )}
-              </div>
+                  <motion.div
+                    animate={{ rotate: openFaq === i ? 180 : 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <ChevronDown
+                      size={16}
+                      className={`min-w-[16px] transition-colors ${openFaq === i ? 'text-zinc-50' : 'text-text-muted'}`}
+                    />
+                  </motion.div>
+                </motion.div>
+                <AnimatePresence>
+                  {openFaq === i && (
+                    <motion.p 
+                      initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                      animate={{ opacity: 1, height: 'auto', marginTop: 12 }}
+                      exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                      transition={{ duration: 0.3, ease: 'easeInOut' }}
+                      className="text-text-secondary text-sm leading-relaxed"
+                    >
+                      {faq.a}
+                    </motion.p>
+                  )}
+                </AnimatePresence>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>

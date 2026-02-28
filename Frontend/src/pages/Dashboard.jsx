@@ -5,6 +5,7 @@ import {
   TrendingUp, TrendingDown, Shield, Brain, Activity, AlertTriangle,
   ArrowRight, ChevronUp, ChevronDown, Briefcase, Zap
 } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 function MetricCard({ label, value, sub, color = 'blue', trend }) {
   const colorMap = {
@@ -44,7 +45,12 @@ function RiskLevelBadge({ riskLevel }) {
 
 function EmptyState() {
   return (
-    <div className="flex flex-col items-center justify-center py-20 text-center">
+    <motion.div 
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5, ease: 'easeOut' }}
+      className="flex flex-col items-center justify-center py-20 text-center"
+    >
       <div className="w-20 h-20 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center mb-6">
         <Briefcase size={32} className="text-zinc-400" />
       </div>
@@ -57,7 +63,7 @@ function EmptyState() {
       <Link to="/app/portfolio" className="btn-primary">
         Set Up Portfolio <ArrowRight size={16} className="ml-2" />
       </Link>
-    </div>
+    </motion.div>
   )
 }
 
@@ -66,11 +72,16 @@ export default function Dashboard() {
 
   if (loading) return (
     <div className="flex items-center justify-center py-32">
-      <div className="text-center">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.9 }}
+        className="text-center"
+      >
         <div className="w-16 h-16 border-4 border-zinc-800 border-t-zinc-400 rounded-full animate-spin mx-auto mb-4" />
-        <p className="text-text-secondary">Analyzing portfolio...</p>
-        <p className="text-text-muted text-sm mt-1">Running ML models & risk calculations</p>
-      </div>
+        <p className="text-text-secondary animate-pulse">Analyzing portfolio...</p>
+        <p className="text-text-muted text-sm mt-1">Calculating institutional risk blocks</p>
+      </motion.div>
     </div>
   )
 
@@ -109,10 +120,30 @@ export default function Dashboard() {
 
   const regimeColors = { Excitement: 'text-accent-amber', Fear: 'text-accent-red', Neutral: 'text-accent-green' }
 
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05
+      }
+    }
+  }
+
+  const item = {
+    hidden: { opacity: 0, y: 15 },
+    show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } }
+  }
+
   return (
-    <div className="space-y-6">
+    <motion.div 
+      initial="hidden"
+      animate="show"
+      variants={container}
+      className="space-y-6"
+    >
       {/* Summary header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <motion.div variants={item} className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h2 className="font-heading text-lg font-semibold text-text-primary mb-1">
             Portfolio: {portfolio.tickers.join(', ')}
@@ -128,27 +159,34 @@ export default function Dashboard() {
         <Link to="/app/risk" className="btn-secondary text-sm py-2">
           Deep Analysis <ArrowRight size={14} className="ml-1" />
         </Link>
-      </div>
+      </motion.div>
 
       {/* KPI Metrics Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+      <motion.div variants={item} className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         <MetricCard label="Ann. Return" value={`${returnPct}%`} sub="Expected" color={parseFloat(returnPct) >= 0 ? 'green' : 'red'} />
         <MetricCard label="Volatility" value={`${volPct}%`} sub="Annualized" color="amber" />
         <MetricCard label="VaR (95%)" value={`-${varPct}%`} sub="Max 30d loss" color="red" />
         <MetricCard label="Sharpe Ratio" value={sharpe_ratio?.toFixed(2) || '—'} sub="Risk-adjusted" color="blue" />
         <MetricCard label="Beta (S&P)" value={portfolio_beta?.toFixed(2) || '—'} sub="Market sensitivity" color="cyan" />
         <MetricCard label="Crash Prob." value={`${crashPct}%`} sub="Next 30 days" color={parseInt(crashPct) > 40 ? 'red' : 'green'} />
-      </div>
+      </motion.div>
 
       {/* 2-column: Vol Forecast + Alerts */}
-      <div className="grid lg:grid-cols-2 gap-6">
+      <motion.div variants={item} className="grid lg:grid-cols-2 gap-6">
         {/* Volatility Forecast */}
         <div className="card">
           <div className="flex items-center gap-2 mb-4">
             <Activity size={18} className="text-zinc-400" />
             <h3 className="font-heading font-semibold text-text-primary">ML Volatility Forecast</h3>
             {volForecast?.confidence && (
-              <span className="badge-cyan text-xs ml-auto">{volForecast.confidence} confidence</span>
+              <motion.span 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+                className="badge-cyan text-xs ml-auto"
+              >
+                {volForecast.confidence} confidence
+              </motion.span>
             )}
           </div>
           {volForecast && !volForecast.error ? (
@@ -158,7 +196,7 @@ export default function Dashboard() {
                 { label: '10-day', key: 'vol_10d' },
                 { label: '30-day', key: 'vol_30d' },
               ].map(f => (
-                <div key={f.key} className="text-center p-3 rounded-xl bg-zinc-900">
+                <div key={f.key} className="text-center p-3 rounded-xl bg-zinc-900 border border-zinc-800/50">
                   <div className="text-text-muted text-xs mb-1">{f.label}</div>
                   <div className="font-heading text-lg font-bold text-zinc-50">
                     {volForecast[f.key] ? `${(volForecast[f.key] * 100).toFixed(1)}%` : '—'}
@@ -187,29 +225,34 @@ export default function Dashboard() {
                 <Shield size={14} /> No critical alerts detected
               </div>
             ) : alerts.filter(a => !!a.type).slice(0, 4).map((alert, i) => (
-              <div key={i} className={`flex items-start gap-2 p-2 rounded-lg text-xs ${
+              <motion.div 
+                key={i} 
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.4 + (i * 0.1) }}
+                className={`flex items-start gap-2 p-2 rounded-lg text-xs ${
                 (alert.severity || '').toLowerCase() === 'critical' ? 'bg-accent-red/10 text-accent-red' :
                 (alert.severity || '').toLowerCase() === 'warning' ? 'bg-accent-amber/10 text-accent-amber' :
                 'bg-zinc-800/50 text-zinc-400'
               }`}>
                 <AlertTriangle size={12} className="mt-0.5 min-w-[12px]" />
                 <span>{alert.message || `${alert.alert_type}: ${alert.severity}`}</span>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Individual Betas */}
       {individual_betas && Object.keys(individual_betas).length > 0 && (
-        <div className="card">
+        <motion.div variants={item} className="card">
           <div className="flex items-center gap-2 mb-4">
             <TrendingUp size={18} className="text-zinc-400" />
             <h3 className="font-heading font-semibold text-text-primary">Individual Stock Betas vs S&P 500</h3>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
             {Object.entries(individual_betas).map(([ticker, beta]) => (
-              <div key={ticker} className="text-center p-3 rounded-xl bg-zinc-900">
+              <div key={ticker} className="text-center p-3 rounded-xl bg-zinc-900 border border-zinc-800/50">
                 <div className="font-mono text-zinc-500 text-xs font-semibold mb-1">{ticker}</div>
                 <div className={`font-heading text-lg font-bold ${beta > 1.2 ? 'text-accent-red' : beta < 0.8 ? 'text-accent-green' : 'text-zinc-50'}`}>
                   {beta.toFixed(2)}
@@ -217,18 +260,18 @@ export default function Dashboard() {
               </div>
             ))}
           </div>
-        </div>
+        </motion.div>
       )}
 
       {/* Navigation shortcuts */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <motion.div variants={item} className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
           { to: '/app/risk', icon: Shield, label: 'Risk Analysis', desc: 'VaR, heatmaps, contribution', color: 'text-zinc-400' },
           { to: '/app/simulations', icon: Activity, label: 'Simulations', desc: 'Monte Carlo, optimization', color: 'text-zinc-400' },
           { to: '/app/ml-insights', icon: Brain, label: 'ML Insights', desc: 'Forecasts, crash predictor', color: 'text-zinc-400' },
           { to: '/app/portfolio', icon: Briefcase, label: 'Edit Portfolio', desc: 'Update tickers & weights', color: 'text-zinc-400' },
         ].map(item => (
-          <Link key={item.to} to={item.to} className="card flex items-start gap-3 group hover:border-zinc-800">
+          <Link key={item.to} to={item.to} className="card flex items-start gap-3 group hover:border-zinc-800 !p-4">
             <item.icon size={20} className={`${item.color} mt-0.5 min-w-[20px]`} />
             <div>
               <div className="font-heading font-semibold text-text-primary text-sm">{item.label}</div>
@@ -236,7 +279,7 @@ export default function Dashboard() {
             </div>
           </Link>
         ))}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   )
 }

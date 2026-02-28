@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { TrendingUp, Github, ArrowRight, Shield, Zap, Lock, BookOpen, Terminal } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 const team = [
   {
@@ -100,18 +101,35 @@ export default function About() {
           <div className="badge-cyan mb-4 inline-flex">The Team</div>
           <h2 className="font-heading text-3xl font-bold text-text-primary">Built by quants & engineers</h2>
         </div>
-        <div className="grid md:grid-cols-3 gap-6">
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { opacity: 1, transition: { staggerChildren: 0.15 } }
+          }}
+          className="grid md:grid-cols-3 gap-6"
+        >
           {team.map(member => (
-            <div key={member.name} className="card text-center">
+            <motion.div 
+              key={member.name} 
+              variants={{
+                hidden: { opacity: 0, scale: 0.95, y: 20 },
+                visible: { opacity: 1, scale: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } }
+              }}
+              whileHover={{ y: -5 }}
+              className="card text-center transition-shadow hover:shadow-card-hover"
+            >
               <div className="w-16 h-16 rounded-xl bg-zinc-800 border border-zinc-800 flex items-center justify-center mx-auto mb-4 font-heading font-bold text-lg text-zinc-300">
                 {member.avatar}
               </div>
               <h3 className="font-heading font-semibold text-text-primary text-base mb-1">{member.name}</h3>
               <div className="badge-blue mb-3 inline-flex text-xs">{member.role}</div>
               <p className="text-text-secondary text-sm">{member.description}</p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </section>
 
       {/* Tech Stack */}
@@ -121,7 +139,13 @@ export default function About() {
           <h2 className="font-heading text-3xl font-bold text-text-primary mb-6">Built on proven open-source</h2>
           
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-12 text-left">
-            <div className="card border-green-500/20 bg-green-500/5">
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="card border-green-500/20 bg-green-500/5 transition-shadow hover:shadow-card-hover"
+            >
               <div className="flex items-center gap-3 mb-4">
                 <Github className="text-green-400" size={24} />
                 <h3 className="font-heading font-semibold text-lg text-text-primary">Fully Open Source</h3>
@@ -132,9 +156,15 @@ export default function About() {
               <a href="https://github.com/devel-maverick/Nivesh-Setu" target="_blank" rel="noopener noreferrer" className="text-green-400 hover:text-green-300 font-medium inline-flex items-center text-sm transition-colors">
                 View Repository <ArrowRight size={16} className="ml-1" />
               </a>
-            </div>
+            </motion.div>
             
-            <div className="card border-blue-500/20 bg-blue-500/5">
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="card border-blue-500/20 bg-blue-500/5 transition-shadow hover:shadow-card-hover"
+            >
               <div className="flex items-center gap-3 mb-4">
                 <Terminal className="text-blue-400" size={24} />
                 <h3 className="font-heading font-semibold text-lg text-text-primary">Self-Hostable</h3>
@@ -146,19 +176,29 @@ export default function About() {
                 <div className="text-zinc-500 mb-1"># Clone and run locally</div>
                 <div>git clone https://github.com/devel-maverick/Nivesh-Setu.git</div>
               </div>
-            </div>
+            </motion.div>
           </div>
 
           <p className="text-text-muted text-sm mb-6 uppercase tracking-wider font-semibold">Powered By</p>
-          <div className="card max-w-4xl mx-auto border-dashed border-zinc-800 bg-transparent">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="card max-w-4xl mx-auto border-dashed border-zinc-800 bg-transparent"
+          >
             <div className="flex flex-wrap gap-3 justify-center p-6">
               {techStack.map(tech => (
-                <span key={tech.name} className={`px-4 py-2 rounded-lg border ${categoryColors[tech.category]}`}>
+                <motion.span 
+                  key={tech.name} 
+                  whileHover={{ scale: 1.05 }}
+                  className={`px-4 py-2 rounded-lg border cursor-default ${categoryColors[tech.category]}`}
+                >
                    {tech.name}
-                </span>
+                </motion.span>
               ))}
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 

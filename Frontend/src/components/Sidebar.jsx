@@ -10,6 +10,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 const navItems = [
   { icon: LayoutDashboard, label: 'Overview', to: '/app/dashboard' },
@@ -24,6 +25,16 @@ const bottomItems = [
 ]
 
 export default function Sidebar({ collapsed, setCollapsed }) {
+  const containerVars = {
+    hidden: { opacity: 0 },
+    show: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } }
+  }
+
+  const itemVars = {
+    hidden: { opacity: 0, x: -10 },
+    show: { opacity: 1, x: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } }
+  }
+
   return (
     <aside
       className="hidden md:flex flex-col h-screen sticky top-0 transition-all duration-300 border-r border-border-default"
@@ -46,50 +57,64 @@ export default function Sidebar({ collapsed, setCollapsed }) {
       </div>
 
       {/* Nav Items */}
-      <nav className="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
+      <motion.nav 
+        variants={containerVars}
+        initial="hidden"
+        animate="show"
+        className="flex-1 px-2 py-4 space-y-1 overflow-y-auto"
+      >
         {navItems.map(item => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            className={({ isActive }) =>
-              `sidebar-item ${isActive ? 'active' : ''} ${collapsed ? 'justify-center' : ''}`
-            }
-            title={collapsed ? item.label : undefined}
-          >
-            <item.icon size={18} className="min-w-[18px]" />
-            {!collapsed && <span className="text-sm">{item.label}</span>}
-          </NavLink>
+          <motion.div key={item.to} variants={itemVars}>
+            <NavLink
+              to={item.to}
+              className={({ isActive }) =>
+                `sidebar-item group ${isActive ? 'active' : ''} ${collapsed ? 'justify-center' : ''}`
+              }
+              title={collapsed ? item.label : undefined}
+            >
+              <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+                <item.icon size={18} className="min-w-[18px]" />
+              </motion.div>
+              {!collapsed && <span className="text-sm transition-colors">{item.label}</span>}
+            </NavLink>
+          </motion.div>
         ))}
-      </nav>
+      </motion.nav>
 
       {/* Bottom */}
       <div className="px-2 py-4 border-t border-border-default space-y-1">
         {bottomItems.map(item => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            className={({ isActive }) =>
-              `sidebar-item ${isActive ? 'active' : ''} ${collapsed ? 'justify-center' : ''}`
-            }
-            title={collapsed ? item.label : undefined}
-          >
-            <item.icon size={18} className="min-w-[18px]" />
-            {!collapsed && <span className="text-sm">{item.label}</span>}
-          </NavLink>
+          <motion.div key={item.to} variants={itemVars}>
+            <NavLink
+              to={item.to}
+              className={({ isActive }) =>
+                `sidebar-item group ${isActive ? 'active' : ''} ${collapsed ? 'justify-center' : ''}`
+              }
+              title={collapsed ? item.label : undefined}
+            >
+              <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+                <item.icon size={18} className="min-w-[18px]" />
+              </motion.div>
+              {!collapsed && <span className="text-sm transition-colors">{item.label}</span>}
+            </NavLink>
+          </motion.div>
         ))}
 
         {/* Collapse Toggle */}
-        <button
+        <motion.button
+          variants={itemVars}
+          whileHover={{ x: collapsed ? 2 : -2 }}
+          whileTap={{ scale: 0.95 }}
           onClick={() => setCollapsed(!collapsed)}
           className={`sidebar-item w-full ${collapsed ? 'justify-center' : 'justify-between'}`}
           aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
-          {!collapsed && <span className="text-sm text-text-muted">Collapse</span>}
+          {!collapsed && <span className="text-sm text-text-muted transition-colors">Collapse</span>}
           {collapsed
-            ? <ChevronRight size={16} />
-            : <ChevronLeft size={16} />
+            ? <ChevronRight size={16} className="text-zinc-500" />
+            : <ChevronLeft size={16} className="text-zinc-500" />
           }
-        </button>
+        </motion.button>
       </div>
     </aside>
   )
