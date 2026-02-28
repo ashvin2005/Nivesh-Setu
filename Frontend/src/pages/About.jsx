@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { TrendingUp, Github, ArrowRight, Shield, Zap, Lock, BookOpen } from 'lucide-react'
+import { TrendingUp, Github, ArrowRight, Shield, Zap, Lock, BookOpen, Terminal } from 'lucide-react'
 
 const team = [
   {

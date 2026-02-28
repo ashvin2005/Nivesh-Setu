@@ -22,6 +22,21 @@ export default function MarketingNavbar() {
     return () => window.removeEventListener('scroll', handler)
   }, [])
 
+  // Handle cross-page hash routing
+  useEffect(() => {
+    if (location.pathname === '/' && location.hash) {
+      setTimeout(() => {
+        const id = location.hash.replace('#', '')
+        const element = document.getElementById(id)
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' })
+        }
+      }, 100)
+    } else if (location.pathname === '/' && !location.hash) {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }, [location])
+
   return (
     <header
       className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
