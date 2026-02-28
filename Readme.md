@@ -389,7 +389,6 @@ erDiagram
 6. Run Monte Carlo simulation (10,000 paths × 252 days)
 7. Generate Efficient Frontier + optimal portfolios
 8. Fetch alternative data:
-   - Reddit sentiment via PRAW
    - Google Trends via pytrends
 9. Run ML models for volatility forecast
 10. Return JSON response to frontend
@@ -477,35 +476,3 @@ erDiagram
 | **Portfolio Health** | Identifies diversification weaknesses |
 
 ---
-
-## 📁 Project Structure
-
-```
-our_project_24/
-├── backend/
-│   ├── main.py              # FastAPI app + endpoints
-│   ├── data_fetcher.py      # yfinance data layer
-│   ├── metrics.py           # VaR, CVaR, Sharpe, Sortino, Beta, MDD
-│   ├── monte_carlo.py       # Monte Carlo simulation
-│   ├── optimization.py      # Efficient Frontier + Markowitz
-│   ├── scenario.py          # Scenario analysis
-│   ├── models.py            # Pydantic request/response models
-│   ├── requirements.txt     # Python dependencies
-│   └── tests/
-│       └── test_api.py      # API tests
-├── frontend/
-│   ├── package.json
-│   ├── public/
-│   │   └── index.html
-│   └── src/
-│       ├── App.jsx          # Main application
-│       ├── api.js           # API client
-│       ├── components/      # React components
-│       └── styles/          # CSS styling
-├── Problem.md
-├── README.md
-└── checkpoints.md
-```
-
----
-
