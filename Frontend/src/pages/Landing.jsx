@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { 
   TrendingUp, Shield, Brain, BarChart, Activity, Zap, ArrowRight,
   CheckCircle, Star, Lock, Globe, Terminal, LineChart, Code, HelpCircle,
-  Briefcase, TrendingDown, ChevronUp, ChevronDown
+  Briefcase, TrendingDown, ChevronUp, ChevronDown, AlertTriangle
 } from 'lucide-react'
 
 // Demo data for dashboard preview
@@ -82,11 +82,47 @@ function Hero() {
                 ))}
               </div>
               
-              {/* Chart Placeholder */}
-              <div className="h-32 rounded-lg bg-zinc-800/30 border border-zinc-800 flex items-end justify-around p-4">
-                {[45, 62, 38, 75, 58, 82, 65, 72, 55, 68, 78, 60].map((h, i) => (
-                  <div key={i} className="w-full max-w-[20px] bg-zinc-600 rounded-t" style={{ height: `${h}%` }} />
-                ))}
+              {/* Realistic Dashboard UI Preview */}
+              <div className="grid grid-cols-2 gap-4">
+                {/* Simulated Volatility Forecast Card */}
+                <div className="rounded-lg bg-zinc-900 border border-zinc-800 p-4">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Activity size={14} className="text-zinc-400" />
+                    <h3 className="text-xs font-semibold text-zinc-300">ML Volatility Forecast</h3>
+                    <span className="bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 px-1.5 py-0.5 rounded text-[10px] ml-auto">high confidence</span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { label: '5-day', val: '24.1%' },
+                      { label: '10-day', val: '25.8%' },
+                      { label: '30-day', val: '28.2%' },
+                    ].map(f => (
+                      <div key={f.label} className="text-center p-2 rounded-lg bg-zinc-950 border border-zinc-800">
+                        <div className="text-zinc-500 text-[10px] mb-1">{f.label}</div>
+                        <div className="font-bold text-sm text-zinc-50">{f.val}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Simulated Risk Alerts Card */}
+                <div className="rounded-lg bg-zinc-900 border border-zinc-800 p-4">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Zap size={14} className="text-amber-400" />
+                    <h3 className="text-xs font-semibold text-zinc-300">Risk Alerts</h3>
+                    <span className="bg-amber-500/10 text-amber-400 border border-amber-500/20 px-1.5 py-0.5 rounded text-[10px] ml-auto">2 alerts</span>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-start gap-2 p-2 rounded mb-1 bg-red-500/10 text-red-400 text-[10px]">
+                      <AlertTriangle size={12} className="min-w-[12px]" />
+                      <span>Volatility Spike: 30-day forecast exceeds historical average</span>
+                    </div>
+                    <div className="flex items-start gap-2 p-2 rounded bg-amber-500/10 text-amber-400 text-[10px]">
+                      <AlertTriangle size={12} className="min-w-[12px]" />
+                      <span>Correlation Breakdown: Tech sector moving inversely to S&P</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -130,17 +166,30 @@ function FeaturesSection() {
                   { label: 'Sharpe', value: '1.84' },
                   { label: 'Beta', value: '1.12' },
                 ].map((m, i) => (
-                  <div key={i} className="p-2 rounded bg-zinc-800/50 text-center">
-                    <div className="text-[9px] text-zinc-500">{m.label}</div>
+                  <div key={i} className="p-2 rounded-lg bg-zinc-800/50 border border-zinc-800 text-center">
+                    <div className="text-[9px] text-zinc-500 mb-0.5">{m.label}</div>
                     <div className="text-xs font-bold text-zinc-300">{m.value}</div>
                   </div>
                 ))}
               </div>
               
-              <div className="w-full flex items-end gap-1 h-20">
-                {[40, 70, 45, 90, 65, 30, 85, 55, 75, 50].map((h, i) => (
-                  <div key={i} className="flex-1 bg-zinc-600 rounded-t-sm transition-all duration-500" style={{ height: `${activeFeature === i % 4 ? h + 15 : h}%` }} />
-                ))}
+              {/* Simulated Deep Analysis Section */}
+              <div className="p-3 bg-zinc-800/30 rounded-lg border border-zinc-800">
+                 <div className="flex items-center justify-between mb-3 text-[10px] text-zinc-400 font-mono">
+                    <span>{activeFeature === 0 ? 'RISK_CONTRIBUTION' : activeFeature === 1 ? 'MONTE_CARLO_PATHS' : activeFeature === 2 ? 'FEATURE_IMPORTANCE' : 'SENTIMENT_SCORE'}</span>
+                    <span className="text-green-400 text-[9px]">ACTIVE</span>
+                 </div>
+                 
+                 {/* Visual representation based on active feature */}
+                 <div className="flex items-end gap-1 h-14">
+                    {[40, 70, 45, 90, 65, 30, 85, 55, 75, 50].map((h, i) => (
+                      <div 
+                        key={i} 
+                        className={`flex-1 rounded-sm transition-all duration-500 ${activeFeature === 1 ? 'bg-cyan-500/40' : activeFeature === 2 ? 'bg-amber-500/40' : activeFeature === 3 ? 'bg-green-500/40' : 'bg-red-500/40'}`} 
+                        style={{ height: `${activeFeature === i % 4 ? h + 15 : h}%` }} 
+                      />
+                    ))}
+                 </div>
               </div>
             </div>
           </div>

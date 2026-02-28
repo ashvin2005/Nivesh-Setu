@@ -119,11 +119,42 @@ export default function About() {
         <div className="text-center mb-12">
           <div className="badge-green mb-4 inline-flex">Technology</div>
           <h2 className="font-heading text-3xl font-bold text-text-primary mb-6">Built on proven open-source</h2>
-          <div className="card max-w-4xl mx-auto">
+          
+          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-12 text-left">
+            <div className="card border-green-500/20 bg-green-500/5">
+              <div className="flex items-center gap-3 mb-4">
+                <Github className="text-green-400" size={24} />
+                <h3 className="font-heading font-semibold text-lg text-text-primary">Fully Open Source</h3>
+              </div>
+              <p className="text-text-secondary leading-relaxed mb-4">
+                Nivesh-Setu is proudly open source. You can audit our risk models, Monte Carlo simulations, and ML forecasting pipelines directly on GitHub. We believe in complete transparency for financial tools.
+              </p>
+              <a href="https://github.com/devel-maverick/Nivesh-Setu" target="_blank" rel="noopener noreferrer" className="text-green-400 hover:text-green-300 font-medium inline-flex items-center text-sm transition-colors">
+                View Repository <ArrowRight size={16} className="ml-1" />
+              </a>
+            </div>
+            
+            <div className="card border-blue-500/20 bg-blue-500/5">
+              <div className="flex items-center gap-3 mb-4">
+                <Terminal className="text-blue-400" size={24} />
+                <h3 className="font-heading font-semibold text-lg text-text-primary">Self-Hostable</h3>
+              </div>
+              <p className="text-text-secondary leading-relaxed mb-4">
+                Want complete privacy? You can run Nivesh-Setu entirely on your local machine or private cloud. Our Python FastAPI backend and React frontend are designed to be easily deployable anywhere.
+              </p>
+              <div className="bg-zinc-950 p-3 rounded-md font-mono text-xs text-zinc-400 border border-zinc-800">
+                <div className="text-zinc-500 mb-1"># Clone and run locally</div>
+                <div>git clone https://github.com/devel-maverick/Nivesh-Setu.git</div>
+              </div>
+            </div>
+          </div>
+
+          <p className="text-text-muted text-sm mb-6 uppercase tracking-wider font-semibold">Powered By</p>
+          <div className="card max-w-4xl mx-auto border-dashed border-zinc-800 bg-transparent">
             <div className="flex flex-wrap gap-3 justify-center p-6">
               {techStack.map(tech => (
                 <span key={tech.name} className={`px-4 py-2 rounded-lg border ${categoryColors[tech.category]}`}>
-                  {tech.name}
+                   {tech.name}
                 </span>
               ))}
             </div>
@@ -140,7 +171,7 @@ export default function About() {
           <Link to="/signup" className="btn-primary">
             Start Now <ArrowRight size={16} className="ml-2" />
           </Link>
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="btn-secondary gap-2">
+          <a href="https://github.com/devel-maverick/Nivesh-Setu" target="_blank" rel="noopener noreferrer" className="btn-secondary gap-2">
             <Github size={16} /> View on GitHub
           </a>
         </div>
