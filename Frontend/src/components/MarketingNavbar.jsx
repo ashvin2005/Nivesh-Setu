@@ -39,12 +39,9 @@ export default function MarketingNavbar() {
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
-      style={scrolled ? {
-        background: 'rgba(10, 10, 10, 0.85)',
-        backdropFilter: 'blur(12px)',
-        borderBottom: '1px solid rgba(255,255,255,0.06)',
-      } : {}}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${
+        scrolled ? 'bg-[#0a0a0a]/85 backdrop-blur-md border-white/[0.06]' : 'bg-transparent border-transparent'
+      }`}
     >
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
