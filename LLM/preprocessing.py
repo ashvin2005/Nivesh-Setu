@@ -1,9 +1,6 @@
 import yfinance as yf
 import pandas as pd
 
-import yfinance as yf
-import pandas as pd
-
 def fetch_price_data(tickers, start, end):
 
     data = yf.download(tickers, start=start, end=end)
