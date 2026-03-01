@@ -1,6 +1,6 @@
 # Nivesh-Setu — Stock Portfolio Risk Analyzer
 
-**Institutional-grade portfolio risk intelligence platform combining quantitative risk metrics, alternative data, and ML-powered insights.**
+**Institutional-grade portfolio risk intelligence platform combining quantitative risk metrics, alternative data, and ML-powered insights — built with Node.js, Python, and React.**
 
 ---
 
@@ -57,7 +57,7 @@ Build a full-stack portfolio risk intelligence platform that:
 - Fetches historical data using yfinance
 - Computes professional-grade risk metrics
 - Runs Monte Carlo simulations
-- Integrates alternative data (Reddit sentiment, VIX, Google Trends)
+- Integrates alternative data (VIX, Google Trends)
 - Applies ML for volatility forecasting
 - Visualizes risk exposure interactively
 
@@ -66,7 +66,7 @@ Build a full-stack portfolio risk intelligence platform that:
 ## 3. Proposed Solution
 
 ### Solution Overview
-**Nivesh-Setu** (Hindi: *Bridge to Investment*) is a full-stack, AI-augmented portfolio risk intelligence platform built with Python, FastAPI, React, and Plotly.js.
+**Nivesh-Setu** (Hindi: *Bridge to Investment*) is a full-stack, AI-augmented portfolio risk intelligence platform built with Node.js (Express), Python, and React.
 
 ### Core Idea
 Convert historical stock data and alternative signals into actionable risk insights using:
@@ -82,7 +82,7 @@ Convert historical stock data and alternative signals into actionable risk insig
 | Layer | Features |
 |-------|----------|
 | **Layer 1: Core Risk** | Historical VaR, Parametric VaR, CVaR, Monte Carlo (10k paths), Sharpe Ratio, Sortino Ratio, Beta, Max Drawdown, Risk Contribution, Correlation Matrix, Efficient Frontier, Markowitz Optimization |
-| **Layer 2: Alt Data** | Reddit Sentiment (r/wallstreetbets via PRAW + VADER), VIX Fear Meter, Google Trends Hype Index, News Sentiment |
+| **Layer 2: Alt Data** | VIX Fear Meter, Google Trends Hype Index |
 | **Layer 3: ML Intelligence** | Volatility Forecasting (RandomForest), Crash Probability Predictor (GradientBoosting), Smart Risk Alerts |
 
 ---
@@ -94,22 +94,26 @@ Convert historical stock data and alternative signals into actionable risk insig
 ```mermaid
 flowchart LR
     A[User] --> B[React Frontend]
-    B --> C[FastAPI Backend]
-    C --> D[Risk Models & ML Models]
-    D --> E[External APIs]
-    E --> F[JSON Response]
-    F --> G[Interactive Dashboard]
+    B --> C[Node.js Express API]
+    C --> D[Python Subprocess]
+    D --> E[Risk Models & ML Models]
+    E --> F[External APIs - yfinance / pytrends]
+    F --> G[JSON Response]
+    G --> H[Interactive Dashboard]
 ```
 
 ### Architecture Description
 1. User inputs portfolio tickers and weights via React dashboard
-2. Backend fetches historical adjusted close data using yfinance
-3. Data is cleaned and converted to daily returns
-4. Statistical metrics and covariance matrix are computed
-5. Risk models (VaR, CVaR, Monte Carlo, Optimization) are executed
-6. Alternative data (Reddit, VIX, Trends) is fetched and analyzed
-7. ML models generate forecasts and alerts
-8. Results are visualized using Plotly.js interactive charts
+2. Frontend sends `POST /api/analyze` to the Express backend
+3. Express spawns a Python child process, forwarding the request payload via stdin
+4. Python fetches historical adjusted close data using `yfinance`
+5. Data is cleaned and converted to daily returns
+6. Statistical metrics and covariance matrix are computed
+7. Risk models (VaR, CVaR, Monte Carlo, Optimization) are executed
+8. Alternative data (VIX, Google Trends) is fetched and analyzed
+9. ML models generate volatility forecasts and risk alerts
+10. Python writes JSON result to stdout; Express forwards it to the frontend
+11. Results are visualized using Plotly.js and Recharts interactive charts
 
 ### Architecture Diagram
 
@@ -127,10 +131,8 @@ flowchart TB
             L1H[Risk Contribution]
         end
         subgraph L2["Layer 2 — Alt Data"]
-            L2A[Reddit WSB Sentiment]
             L2B[VIX Fear Meter]
             L2C[Google Trends Hype Index]
-            L2D[News Sentiment]
         end
         subgraph L3["Layer 3 — ML Intelligence"]
             L3A[Volatility Forecast - RandomForest]
@@ -201,7 +203,6 @@ erDiagram
 
 ### Source
 - **Price Data**: Yahoo Finance via `yfinance` Python library
-- **Reddit Data**: Reddit API via `praw`
 - **Google Trends**: Google Trends API via `pytrends`
 - **VIX Data**: CBOE Volatility Index via Yahoo Finance (`^VIX`)
 
@@ -209,7 +210,6 @@ erDiagram
 - Daily Adjusted Close Prices
 - Volume Data
 - Market Index Data (S&P 500 for beta calculation)
-- Reddit post titles and scores
 - Google search interest over time
 - VIX index values
 
@@ -227,7 +227,6 @@ erDiagram
 4. Compute daily log returns
 5. Calculate covariance matrix
 6. Normalize portfolio weights
-7. Aggregate sentiment scores
 
 ---
 
@@ -242,7 +241,6 @@ erDiagram
 - CVaR (Expected Shortfall)
 - Monte Carlo Simulation
 - Markowitz Mean-Variance Optimization
-- VADER Sentiment Analysis
 - RandomForest Volatility Forecaster
 - GradientBoosting Crash Probability Predictor
 
@@ -274,48 +272,103 @@ erDiagram
 
 ### Frontend
 | Technology | Purpose |
-|------------|---------|
+|------------|-------|
 | React 18 | UI framework |
-| Plotly.js | Interactive charts |
+| Vite | Build tool & dev server |
+| Tailwind CSS | Utility-first styling |
+| Framer Motion | Animations |
+| Plotly.js / react-plotly.js | Interactive financial charts |
+| Recharts | Supplementary charting |
 | Axios | HTTP client |
-| CSS3 | Styling with dark theme |
+| Clerk | Authentication (login / signup) |
+| React Router v6 | Client-side routing |
+| Lucide React | Icon library |
 
 ### Backend
 | Technology | Purpose |
-|------------|---------|
-| Python 3.11 | Primary language |
-| FastAPI | REST API framework |
+|------------|-------|
+| Node.js + Express 5 | HTTP API server |
+| Python 3 (subprocess) | All computation & ML |
 | NumPy | Matrix operations |
 | Pandas | Data manipulation |
 | SciPy | Optimization algorithms |
-| yfinance | Stock data fetching |
-| PRAW | Reddit API |
+| scikit-learn | ML models (RandomForest, GBM) |
+| yfinance | Stock & VIX data fetching |
 | pytrends | Google Trends |
-| VADER | Sentiment analysis |
 
 ### ML/AI
 | Model | Purpose |
-|-------|---------|
+|-------|-------|
 | RandomForest | Volatility forecasting |
 | GradientBoosting | Crash probability |
 | Monte Carlo | Risk simulation |
 
 ### Database
-- MVP: In-memory processing
-- Future: SQLite / PostgreSQL
+- MVP: In-memory processing (stateless per request)
+- Future: PostgreSQL / Supabase
 
 ### Deployment
-- Local development
-- Future: Railway (backend) + Vercel (frontend)
-
----
+| Service | Purpose |
+|---------|-------|
+| Vercel | Frontend hosting |
+| Render | Backend (Node.js + Python) hosting |
 
 ## 9. API Documentation & Testing
 
+### Endpoint
 
+**`POST /api/analyze`** — Analyze a portfolio and return full risk metrics.
+
+#### Request Body
+```json
+{
+  "tickers": ["AAPL", "TSLA"],
+  "weights": [0.6, 0.4],
+  "timeframe": "1Y"
+}
+```
+> Alternatively, pass `start` and `end` date strings instead of `timeframe`:
+```json
+{
+  "tickers": ["AAPL"],
+  "weights": [1],
+  "start": "2023-01-01",
+  "end": "2024-01-01"
+}
+```
+
+#### Response (200 OK)
+```json
+{
+  "expected_return": 0.00123,
+  "volatility": 0.0312,
+  "sharpe_ratio": 0.0512,
+  "correlation_matrix": { "AAPL": { "AAPL": 1, "TSLA": 0.51 }, "TSLA": { ... } },
+  "portfolio_beta": 1.72,
+  "individual_betas": { "AAPL": 1.20, "TSLA": 2.45 },
+  "var_95": 0.0284,
+  "cvar_95": 0.0391,
+  "max_drawdown": -0.187,
+  "scenario_result": { ... },
+  "monte_carlo_paths": [ ... ],
+  "efficient_frontier": [ ... ],
+  "volatility_forecast": 0.034,
+  "crash_probability": 0.12,
+  "alerts": [ "High beta detected", "Tail risk elevated" ]
+}
+```
 
 ### API Testing Screenshots
 
+**Test 1 — Multi-ticker portfolio with timeframe (`AAPL` + `TSLA`, weights 0.6 / 0.4, `1Y`)**
+
+![API Test 1 - Multi ticker](./screenshot1.png)
+
+**Test 2 — Single ticker with custom date range (`AAPL`, weight 1.0, `2023-01-01` → `2024-01-01`)**
+
+![API Test 2 - Date range](./screenshot2.png)
+
+> Both requests return `200 OK` with full risk metrics including `expected_return`, `volatility`, `sharpe_ratio`, `correlation_matrix`, `portfolio_beta`, `individual_betas`, `var_95`, `cvar_95`, `max_drawdown`, `scenario_result`, `monte_carlo_paths`, `efficient_frontier`, `volatility_forecast`, `crash_probability`, and `alerts`.
 
 ---
 
@@ -325,75 +378,76 @@ erDiagram
 **Deliverables:**
 - [x] Risk model selection
 - [x] Mathematical validation of formulas
-- [ ] UI wireframe design
-- [ ] Architecture diagram
+- [x] Architecture diagram
 
 ### Checkpoint 2: Backend Development
 **Deliverables:**
-- [ ] Data fetching engine (yfinance)
-- [ ] Return computation module
-- [ ] Covariance matrix calculation
-- [ ] VaR implementation (Historical + Parametric)
-- [ ] CVaR implementation
-- [ ] Sharpe & Sortino ratio
-- [ ] Beta calculation
-- [ ] Max Drawdown
-- [ ] Risk Contribution per asset
+- [x] Node.js + Express API server with Python subprocess bridge
+- [x] Data fetching engine (yfinance)
+- [x] Return computation module
+- [x] Covariance matrix calculation
+- [x] VaR implementation (Historical + Parametric)
+- [x] CVaR implementation
+- [x] Sharpe & Sortino ratio
+- [x] Beta calculation (portfolio + individual)
+- [x] Max Drawdown
+- [x] Risk Contribution per asset
+- [x] Correlation matrix
+- [x] Scenario analysis
 
 ### Checkpoint 3: Frontend Development
 **Deliverables:**
-- [ ] React dashboard setup
-- [ ] Portfolio input UI
-- [ ] Metric cards visualization
-- [ ] Monte Carlo chart (Plotly)
-- [ ] Correlation heatmap
-- [ ] Scenario slider
-- [ ] Efficient Frontier chart
-- [ ] VIX Fear Meter gauge
-- [ ] Sentiment panel
+- [x] React + Vite + Tailwind CSS setup
+- [x] Clerk authentication (login / signup pages)
+- [x] Marketing layout (Landing, About, Pricing pages)
+- [x] Dashboard layout with sidebar navigation
+- [x] Portfolio input UI
+- [x] Dashboard page with metric cards
 
 ### Checkpoint 4: Model Training
 **Deliverables:**
-- [ ] Monte Carlo simulation engine
-- [ ] Markowitz optimization
-- [ ] RandomForest volatility forecaster
-- [ ] GradientBoosting crash predictor
+- [x] Monte Carlo simulation engine
+- [x] Markowitz / Efficient Frontier optimization
+- [x] RandomForest volatility forecaster
+- [x] GradientBoosting crash predictor
+- [x] Smart alert engine
 
 ### Checkpoint 5: Model Integration
 **Deliverables:**
-- [ ] Monte Carlo API endpoint
-- [ ] Optimization API endpoint
-- [ ] ML forecast endpoint
-- [ ] Alert engine
+- [x] `/api/analyze` endpoint live and tested
+- [x] Monte Carlo results in API response
+- [x] ML forecast (volatility + crash probability) in response
+- [x] Alert engine integrated
 
 ### Checkpoint 6: Deployment
 **Deliverables:**
-- [ ] Local development setup
-- [ ] Docker configuration
-- [ ] Cloud deployment
-- [ ] Documentation completion
+- [x] Local development setup
+- [x] Vercel deployment (frontend)
+- [x] Render deployment (backend)
 
 ---
 
 ## 11. End-to-End Workflow
 
 ```
-1. User enters portfolio (tickers + weights) in React UI
-2. Frontend sends POST /analyze to FastAPI backend
-3. Backend fetches:
-   - Historical prices from yfinance
-   - S&P 500 benchmark data
-   - VIX index data
-4. Compute daily returns and covariance matrix
-5. Calculate risk metrics (VaR, CVaR, Sharpe, Sortino, Beta, MDD)
-6. Run Monte Carlo simulation (10,000 paths × 252 days)
-7. Generate Efficient Frontier + optimal portfolios
-8. Fetch alternative data:
-   - Google Trends via pytrends
-9. Run ML models for volatility forecast
-10. Return JSON response to frontend
-11. Render interactive Plotly charts
-12. User can run scenario analysis with shock sliders
+1. User logs in via Clerk authentication
+2. User enters portfolio (tickers + weights) in React dashboard
+3. Frontend sends POST /api/analyze to Express backend
+4. Express backend spawns Python subprocess, passes JSON payload via stdin
+5. Python (riskengine.py) orchestrates:
+   - Historical prices fetched from Yahoo Finance (yfinance)
+   - S&P 500 + VIX benchmark data fetched
+   - Daily returns and covariance matrix computed
+   - VaR (Historical + Parametric), CVaR, Sharpe, Sortino, Beta, MDD calculated
+   - Monte Carlo simulation run (10,000 paths × 252 days)
+   - Efficient Frontier + Markowitz optimal portfolios generated
+   - Google Trends data fetched via pytrends
+   - RandomForest volatility forecast generated
+   - GradientBoosting crash probability computed
+   - Smart risk alerts triggered
+6. Python writes JSON result to stdout
+7. Express reads stdout and returns JSON response to frontend
+8. React renders interactive Plotly.js and Recharts visualizations
 ```
 
 ---
@@ -402,9 +456,8 @@ erDiagram
 
 | Resource | Link |
 |----------|------|
-| **Live Demo** | (Add deployed URL) |
-| **Demo Video** | (Add YouTube/Loom link) |
-| **GitHub Repository** | (Add GitHub repo link) |
+| **Live Demo (Frontend)** | https://nivesh-setu.vercel.app |
+| **Backend API** | https://nivesh-setu-1.onrender.com |
 
 ---
 
@@ -412,13 +465,15 @@ erDiagram
 
 | Deliverable | Status |
 |-------------|--------|
-| Functional risk analytics dashboard | In Progress |
-| Monte Carlo simulation engine | In Progress |
-| Portfolio optimization module | Pending |
-| Interactive visualization interface | In Progress |
-| Alternative data integration (Reddit, VIX, Trends) | Pending |
-| ML volatility forecasting | Pending |
-| Smart risk alerts | Pending |
+| Functional risk analytics dashboard | ✅ Complete |
+| `/api/analyze` REST endpoint live | ✅ Complete |
+| Monte Carlo simulation engine | ✅ Complete |
+| Portfolio optimization (Efficient Frontier) | ✅ Complete |
+| ML volatility forecasting (RandomForest) | ✅ Complete |
+| Crash probability predictor (GBM) | ✅ Complete |
+| Smart risk alerts engine | ✅ Complete |
+| Alternative data (VIX, Google Trends) | ✅ Complete |
+| Clerk authentication | ✅ Complete |
 
 ---
 
@@ -426,7 +481,7 @@ erDiagram
 
 | Member Name | Role | Responsibilities |
 |-------------|------|------------------|
-| Vinay Sharma | Backend Engineer | FastAPI development, backend development |
+| Vinay Sharma | Backend Engineer | Node.js/Express API development, Python subprocess bridge |
 | Ashvin Tiwari | Quant Developer | Risk modeling, Monte Carlo simulation, optimization, data processing, ML integration |
 | Sumit Kumar | Frontend Developer | React dashboard, Plotly visualizations, UI/UX |
 
@@ -460,7 +515,6 @@ erDiagram
 | Relies on historical data assumptions | Past ≠ Future |
 | No real-time high-frequency data | Limited intraday analysis |
 | Market regime shifts not modeled | Black swan events not captured |
-| Reddit API rate limits | May need caching |
 | Monte Carlo assumes normal distribution | Real markets have fat tails |
 
 ---
@@ -472,7 +526,7 @@ erDiagram
 | **Retail Investors** | Access to institutional-grade risk tools |
 | **Financial Literacy** | Interactive learning of risk concepts |
 | **Data-Driven Decisions** | Replaces intuition with analytics |
-| **Market Awareness** | Sentiment + VIX integration shows market mood |
+| **Market Awareness** | VIX Fear Index integration shows market mood |
 | **Portfolio Health** | Identifies diversification weaknesses |
 
 ---
