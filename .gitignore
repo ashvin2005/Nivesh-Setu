@@ -39,4 +39,7 @@ logs/
 *.log
 
 # Project specific
+node_modules/
+.vite/
+dist/
 project.md
